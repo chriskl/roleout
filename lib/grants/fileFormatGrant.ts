@@ -2,22 +2,23 @@ import {FileFormat} from '../objects/fileFormat'
 import {Schema} from '../objects/schema'
 import {Role} from '../roles/role'
 import {Privilege} from '../privilege'
-import {SchemaObjectGrant, SchemaObjectGrantKind} from './schemaObjectGrant'
+import {SchemaObjectGrant} from './schemaObjectGrant'
 import {Grant} from './grant'
+import {SchemaObjectType} from '../objects/objects'
 
 export class FileFormatGrant extends SchemaObjectGrant {
   schema: Schema
   fileFormat?: FileFormat
   future: boolean
-  privilege: Privilege
+  privileges: Privilege[]
   role: Role
   dependsOn?: Grant[]
-  kind: SchemaObjectGrantKind = 'file_format'
+  objectType = SchemaObjectType.FILE_FORMAT
 
   constructor(
     schema: Schema,
     future: boolean,
-    privilege: Privilege,
+    privileges: Privilege[],
     role: Role,
     fileFormat?: FileFormat,
     dependsOn?: Grant[]
@@ -26,7 +27,7 @@ export class FileFormatGrant extends SchemaObjectGrant {
     this.schema = schema
     this.fileFormat = fileFormat
     this.future = future
-    this.privilege = privilege
+    this.privileges = privileges
     this.role = role
     this.dependsOn = dependsOn
   }

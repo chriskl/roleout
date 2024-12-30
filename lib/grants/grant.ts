@@ -1,32 +1,33 @@
 import { Privilege } from '../privilege'
 import { Role } from '../roles/role'
-import {SchemaObjectGrant, SchemaObjectGrantKind} from './schemaObjectGrant'
+import {SchemaObjectGrant} from './schemaObjectGrant'
 import {SchemaGrant} from './schemaGrant'
 import {DatabaseGrant} from './databaseGrant'
 import {VirtualWarehouseGrant} from './virtualWarehouseGrant'
+import {AccountObjectType, SchemaObjectType} from '../objects/objects'
 
-export type GrantType = 'SchemaObjectGrant' | 'SchemaGrant' | 'DatabaseGrant' | 'VirtualWarehouseGrant'
-export type GrantKind = SchemaObjectGrantKind | 'schema' | 'database' | 'virtual_warehouse'
+export type GrantType = 'DatabaseSchemaObjectsGrant' | 'DatabaseSchemataGrant' | 'SchemaObjectGrant' | 'SchemaGrant' | 'DatabaseGrant' | 'VirtualWarehouseGrant'
+export type GrantObjectType = SchemaObjectType | AccountObjectType
 
 export interface Grant {
-  privilege: Privilege
+  privileges: Privilege[]
   role: Role
   type: GrantType
-  kind: GrantKind
+  objectType: GrantObjectType
 }
 
-export function isSchemaObjectGrant(obj: any): obj is SchemaObjectGrant {
+export function isSchemaObjectGrant(obj: Grant): obj is SchemaObjectGrant {
   return 'type' in obj && obj.type === 'SchemaObjectGrant'
 }
 
-export function isSchemaGrant(obj: any): obj is SchemaGrant {
+export function isSchemaGrant(obj: Grant): obj is SchemaGrant {
   return 'type' in obj && obj.type === 'SchemaGrant'
 }
 
-export function isDatabaseGrant(obj: any): obj is DatabaseGrant {
+export function isDatabaseGrant(obj: Grant): obj is DatabaseGrant {
   return 'type' in obj && obj.type === 'DatabaseGrant'
 }
 
-export function isVirtualWarehouseGrant(obj: any): obj is VirtualWarehouseGrant {
+export function isVirtualWarehouseGrant(obj: Grant): obj is VirtualWarehouseGrant {
   return 'type' in obj && obj.type === 'VirtualWarehouseGrant'
 }

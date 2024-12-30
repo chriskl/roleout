@@ -2,22 +2,23 @@ import {Stream} from '../objects/stream'
 import {Schema} from '../objects/schema'
 import {Role} from '../roles/role'
 import {Privilege} from '../privilege'
-import {SchemaObjectGrant, SchemaObjectGrantKind} from './schemaObjectGrant'
+import {SchemaObjectGrant} from './schemaObjectGrant'
 import {Grant} from './grant'
+import {SchemaObjectType} from '../objects/objects'
 
 export class StreamGrant extends SchemaObjectGrant {
   schema: Schema
   stream?: Stream
   future: boolean
-  privilege: Privilege
+  privileges: Privilege[]
   role: Role
   dependsOn?: Grant[]
-  kind: SchemaObjectGrantKind = 'stream'
+  objectType = SchemaObjectType.STREAM
 
   constructor(
     schema: Schema,
     future: boolean,
-    privilege: Privilege,
+    privileges: Privilege[],
     role: Role,
     stream?: Stream,
     dependsOn?: Grant[]
@@ -26,7 +27,7 @@ export class StreamGrant extends SchemaObjectGrant {
     this.schema = schema
     this.stream = stream
     this.future = future
-    this.privilege = privilege
+    this.privileges = privileges
     this.role = role
     this.dependsOn = dependsOn
   }

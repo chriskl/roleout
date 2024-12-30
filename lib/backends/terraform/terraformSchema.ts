@@ -20,9 +20,7 @@ export class TerraformSchema implements TerraformResource, SchemaOptions {
     this.dataRetentionTimeInDays = dataRetentionTimeInDays
   }
 
-  resourceType(): string {
-    return 'snowflake_schema'
-  }
+  resourceType = 'snowflake_schema'
 
   resourceName(): string {
     const standardDatabaseName = standardizeIdentifierForResource(this.database.name)
@@ -39,7 +37,8 @@ export class TerraformSchema implements TerraformResource, SchemaOptions {
     const spacing = TerraformBackend.SPACING
 
     return compact([
-      `resource ${this.resourceType()} ${this.resourceName()} {`,
+      `resource ${this.resourceType} ${this.resourceName()} {`,
+      spacing + 'provider = snowflake.sysadmin',
       spacing + `database = snowflake_database.${this.database.resourceName()}.name`,
       spacing + `name = "${this.name}"`,
       spacing + `is_managed = ${this.managedAccess}`,
@@ -47,6 +46,10 @@ export class TerraformSchema implements TerraformResource, SchemaOptions {
       this.dataRetentionTimeInDays !== undefined ? spacing + `data_retention_days = ${this.dataRetentionTimeInDays}` : null,
       '}',
     ]).join('\n')
+  }
+
+  qualifiedName(): string {
+    return `"${this.database.name}"."${this.name}"`
   }
 
   static fromSchema(schema: Schema): TerraformSchema {
